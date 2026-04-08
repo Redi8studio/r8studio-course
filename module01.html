@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R8Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+#mod { background:#0a0808; font-family:'DM Sans',sans-serif; font-weight:300; color:#fdf8f2; }
+.mod-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:0.5px solid rgba(192,24,26,0.25); }
+.back-btn { font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:#5a5050; border:0.5px solid rgba(255,255,255,0.08); padding:6px 12px; cursor:pointer; }
+.mod-id { font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:#c0181a; }
+.mod-progress { font-size:11px; color:#4a4040; }
+.mod-hero { padding:32px 24px 24px; border-bottom:0.5px solid rgba(255,255,255,0.04); }
+.mod-tag { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#c0181a; margin-bottom:10px; }
+.mod-title { font-size:32px; font-weight:300; color:#f0e8d8; line-height:1.2; margin-bottom:10px; font-style:italic; }
+.mod-sub { font-size:13px; color:#5a5050; line-height:1.7; margin-bottom:18px; }
+.pills { display:flex; gap:10px; flex-wrap:wrap; }
+.value-pill { display:inline-flex; align-items:center; gap:8px; border:0.5px solid rgba(201,168,76,0.3); padding:6px 14px; }
+.vl { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#5a5050; }
+.vn { font-size:15px; color:#c9a84c; letter-spacing:0.03em; }
+.sections { padding:0 24px 32px; }
+.sb { border-bottom:0.5px solid rgba(255,255,255,0.04); padding:22px 0; }
+.sb:last-child { border-bottom:none; }
+.stag { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#c0181a; margin-bottom:10px; }
+.stxt { font-size:13px; line-height:1.9; color:#7a7070; }
+.video-wrap { background:rgba(255,255,255,0.02); border:0.5px solid rgba(192,24,26,0.2); border-radius:2px; overflow:hidden; margin-top:4px; }
+.video-placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:40px 24px; text-align:center; }
+.play-icon { width:52px; height:52px; border-radius:50%; background:rgba(192,24,26,0.15); border:0.5px solid rgba(192,24,26,0.3); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 0.2s; }
+.play-icon:hover { background:rgba(192,24,26,0.25); }
+.play-tri { width:0; height:0; border-top:9px solid transparent; border-bottom:9px solid transparent; border-left:16px solid #c0181a; margin-left:3px; }
+.video-label { font-size:13px; color:#7a7070; }
+.video-sublabel { font-size:10px; color:#3a3030; letter-spacing:0.12em; text-transform:uppercase; }
+.rule-box { background:rgba(192,24,26,0.07); border:0.5px solid rgba(192,24,26,0.2); border-left:2px solid #c0181a; padding:18px 20px; margin-top:4px; }
+.rule-box p { font-size:13px; line-height:1.9; color:#c4baba; }
+.rule-box strong { color:#f0e8d8; font-weight:500; display:block; margin-bottom:8px; font-size:14px; }
+.steps { list-style:none; display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.si { display:flex; align-items:flex-start; gap:14px; }
+.sn { font-size:14px; color:rgba(192,24,26,0.45); min-width:20px; padding-top:2px; font-weight:500; }
+.st { font-size:13px; line-height:1.7; color:#7a7070; }
+.highlight { color:#c4baba; font-weight:500; }
+.download-box { background:rgba(255,255,255,0.015); border:0.5px solid rgba(192,24,26,0.2); padding:20px; margin-top:4px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.dl-info {}
+.dl-title { font-size:13px; font-weight:500; color:#c4baba; margin-bottom:4px; }
+.dl-sub { font-size:11px; color:#4a4040; line-height:1.6; }
+.dl-btn { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#c9a84c; border:0.5px solid rgba(201,168,76,0.3); padding:10px 20px; cursor:pointer; background:transparent; white-space:nowrap; transition:background 0.2s; }
+.dl-btn:hover { background:rgba(201,168,76,0.06); }
+.rules-block { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.rule-row { padding:14px 16px; background:rgba(255,255,255,0.015); border:0.5px solid rgba(255,255,255,0.05); border-left:1.5px solid rgba(192,24,26,0.4); }
+.rule-title { font-size:11px; font-weight:500; color:#c4baba; margin-bottom:4px; letter-spacing:0.05em; }
+.rule-desc { font-size:12px; line-height:1.7; color:#5a5050; }
+.exercise-box { background:rgba(201,168,76,0.04); border:0.5px solid rgba(201,168,76,0.2); padding:20px; margin-top:4px; }
+.exercise-steps { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.exercise-step { display:flex; align-items:flex-start; gap:12px; font-size:13px; line-height:1.7; color:#7a7070; }
+.en { color:rgba(201,168,76,0.5); min-width:18px; font-weight:500; }
+.win-box { background:rgba(192,24,26,0.07); border:0.5px solid rgba(192,24,26,0.2); border-left:2px solid #c0181a; padding:18px 20px; margin-top:4px; }
+.win-box p { font-size:15px; font-style:italic; line-height:1.8; color:#f0e8d8; }
+.unlock-box { background:rgba(255,255,255,0.01); border:0.5px solid rgba(255,255,255,0.05); padding:16px 18px; margin-top:4px; }
+.unlock-box p { font-size:13px; line-height:1.8; color:#5a5050; }
+.unlock-box span { color:#c9a84c; }
+.nextbtn { width:100%; background:linear-gradient(135deg,#c0181a,#7a0d0e); border:none; padding:15px 20px; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:#fdf8f2; cursor:pointer; margin-top:22px; transition:opacity 0.2s; }
+.nextbtn:hover { opacity:0.85; }
+.mod-footer { padding:14px 24px; border-top:0.5px solid rgba(192,24,26,0.12); display:flex; justify-content:space-between; }
+.fl { font-size:12px; font-style:italic; color:#c0181a; }
+.fr { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:#2a2020; }
+
+.complete-btn { width:100%; background:linear-gradient(135deg,#c0181a,#7a0d0e); border:none; padding:15px 20px; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:#fdf8f2; cursor:pointer; margin-top:22px; transition:opacity 0.2s; }
+.complete-btn:hover { opacity:0.85; }
+.complete-btn.done { background:linear-gradient(135deg,#2a6e2a,#1a4a1a); }
+
+</style>
+
+<div id="mod">
+
+<div class="mod-header">
+  <a class="back-btn" href="index.html">All Modules</a>
+  <div class="mod-id">Module 01</div>
+  <div class="mod-progress">2 of 10</div>
+</div>
+
+<div class="mod-hero">
+  <div class="mod-tag">Your Studio Setup</div>
+  <div class="mod-title">Before you create anything<br>you need your studio ready.</div>
+  <div class="mod-sub">This takes five minutes. Set it up once and it runs forever.</div>
+  <div class="pills">
+    <div class="value-pill"><span class="vl">Tools</span><span class="vn">Claude Project + Higgsfield</span></div>
+  </div>
+</div>
+
+<div class="sections">
+
+<div class="sb">
+  <div class="stag">Core Concept</div>
+  <div class="stxt">Your studio has two tools. Claude hosts your creative director. Higgsfield is your camera. Every skill in this course works by connecting the two through a Claude project.<br><br>This module walks you through setting that up. A Claude project is your space to give Claude a specific role. From that point forward every conversation inside that project remembers who it is and what it is there to do.</div>
+</div>
+
+<div class="sb">
+  <div class="stag">Watch First</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Module 01 Demo</div>
+      <div class="video-sublabel">Watch before you start</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">The System</div>
+  <ul class="steps">
+    <li class="si"><span class="sn">1</span><span class="st">Open Claude and create a new Project</span></li>
+    <li class="si"><span class="sn">2</span><span class="st">Name it <span class="highlight">R8 Studio Skills</span></span></li>
+    <li class="si"><span class="sn">3</span><span class="st">Copy the skill file below and paste it into the instructions field of your <span class="highlight">R8 Studio Skills project</span></span></li>
+    <li class="si"><span class="sn">4</span><span class="st">Download the skill file and upload it to the project knowledge section</span></li>
+    <li class="si"><span class="sn">5</span><span class="st">Open Higgsfield and create your account</span></li>
+  </ul>
+</div>
+
+<div class="sb">
+  <div class="stag">Download the Skill File</div>
+  <div class="stxt" style="margin-bottom:12px;">This is the first skill file for your studio. Download it and upload it to your R8 Studio Skills project knowledge section. Follow the demo to see exactly where it goes.</div>
+  <div class="download-box">
+    <div class="dl-info">
+      <div class="dl-title">r8-clone — Skill File</div>
+      <div class="dl-sub">Download and upload to your R8 Studio Skills project knowledge section.</div>
+    </div>
+    <button class="dl-btn">Download Skill</button>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">How the Clone Skill Works</div>
+  <div class="stxt">The Clone skill is the foundation of the entire system. It lets you place any jewellery piece onto a model image using two inputs and Claude as your prompt engine.<br><br>You upload two images. Image 1 is your reference. The model, the pose, the lighting, the setting, the mood you want. Image 2 is your product. The actual jewellery piece from your supplier site or product page. Type the word <span class="highlight">clone</span>. Claude reads both images, extracts everything from the reference, describes your piece accurately, and outputs a complete Higgsfield prompt. You copy it and paste it straight in.</div>
+</div>
+
+<div class="sb">
+  <div class="stag">Reference Image Rules</div>
+  <div class="rules-block">
+    <div class="rule-row">
+      <div class="rule-title">Lighting must be clear</div>
+      <div class="rule-desc">The output light will match your reference light. Soft, hard, directional, diffused. Whatever is in the reference comes through in the output.</div>
+    </div>
+    <div class="rule-row">
+      <div class="rule-title">Jewellery must match the form</div>
+      <div class="rule-desc">Find a reference with a model wearing the same type of jewellery you want to generate. Ring reference for a ring. Earring reference for an earring.</div>
+    </div>
+    <div class="rule-row">
+      <div class="rule-title">Model and pose must be clear</div>
+      <div class="rule-desc">The closer the reference is to what you want the output to look like the better. Blurry or unclear references produce blurry or unclear outputs.</div>
+    </div>
+    <div class="rule-row">
+      <div class="rule-title">Avoid heavily filtered images</div>
+      <div class="rule-desc">Heavily edited or filtered references confuse the output. Find references that feel genuinely photographic.</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">Watch First</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Setting Up Your Studio</div>
+      <div class="video-sublabel">Follow along with the demo</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">The Exercise</div>
+  <div class="exercise-box">
+    <ul class="exercise-steps">
+      <li class="exercise-step"><span class="en">1</span>Create your R8 Studio Skills project in Claude.</li>
+      <li class="exercise-step"><span class="en">2</span>Paste the project instruction into the instructions field.</li>
+      <li class="exercise-step"><span class="en">3</span>Download the r8-clone skill file and upload it to the knowledge section.</li>
+      <li class="exercise-step"><span class="en">4</span>Open Higgsfield and create your account.</li>
+      <li class="exercise-step"><span class="en">5</span>Your studio is ready.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">The Win</div>
+  <div class="win-box">
+    <p>You have run the Clone skill for the first time. You found a reference, uploaded it through Claude, generated it in Higgsfield and saved the result. Your studio is working. From here every module adds a new skill and a new capability until you have a complete content system that covers every shoot you will ever need.</p>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">What Comes Next</div>
+  <div class="unlock-box">
+    <p><span>Module 02</span> puts the Clone skill to work on a real jewellery piece. A model shot from a supplier image. Start to finish in one session.</p>
+  </div>
+</div>
+
+<button class="complete-btn" id="completeBtn" onclick="markComplete()">Mark Complete and Continue</button>
+
+</div>
+
+<div class="mod-footer">
+  <div class="fl">Built with intention. Designed to scale.</div>
+  <div class="fr">R8Studio — 2026</div>
+</div>
+
+</div>
+
+</head>
+<body>
+
+<script>
+const MODULE_INDEX = 1;
+const NEXT_PAGE = 'module02.html';
+function markComplete() {
+  const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+  if (!completed.includes(MODULE_INDEX)) completed.push(MODULE_INDEX);
+  localStorage.setItem('r8_completed', JSON.stringify(completed));
+  const btn = document.getElementById('completeBtn');
+  if (btn) { btn.textContent = 'Completed ✓'; btn.classList.add('done'); }
+  setTimeout(() => { window.location.href = NEXT_PAGE; }, 800);
+}
+window.addEventListener('DOMContentLoaded', () => {
+  const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+  const btn = document.getElementById('completeBtn');
+  if (btn && completed.includes(MODULE_INDEX)) {
+    btn.textContent = 'Completed ✓';
+    btn.classList.add('done');
+  }
+});
+</script>
+
+</body>
+</html>

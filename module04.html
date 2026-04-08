@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R8Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+#mod { background:#0a0808; font-family:'DM Sans',sans-serif; font-weight:300; color:#fdf8f2; }
+.mod-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:0.5px solid rgba(192,24,26,0.25); }
+.back-btn { font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:#5a5050; border:0.5px solid rgba(255,255,255,0.08); padding:6px 12px; cursor:pointer; }
+.mod-id { font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:#c0181a; }
+.mod-progress { font-size:11px; color:#4a4040; }
+.mod-hero { padding:32px 24px 24px; border-bottom:0.5px solid rgba(255,255,255,0.04); }
+.mod-tag { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#c0181a; margin-bottom:10px; }
+.mod-title { font-size:32px; font-weight:300; color:#f0e8d8; line-height:1.2; margin-bottom:10px; font-style:italic; }
+.mod-sub { font-size:13px; color:#5a5050; line-height:1.7; margin-bottom:18px; }
+.pills { display:flex; gap:10px; flex-wrap:wrap; }
+.value-pill { display:inline-flex; align-items:center; gap:8px; border:0.5px solid rgba(201,168,76,0.3); padding:6px 14px; }
+.vl { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#5a5050; }
+.vn { font-size:15px; color:#c9a84c; letter-spacing:0.03em; }
+.sections { padding:0 24px 32px; }
+.sb { border-bottom:0.5px solid rgba(255,255,255,0.04); padding:22px 0; }
+.sb:last-child { border-bottom:none; }
+.stag { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#c0181a; margin-bottom:10px; }
+.stxt { font-size:13px; line-height:1.9; color:#7a7070; }
+.download-box { background:rgba(255,255,255,0.015); border:0.5px solid rgba(192,24,26,0.2); padding:20px; margin-top:4px; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+.dl-title { font-size:13px; font-weight:500; color:#c4baba; margin-bottom:4px; }
+.dl-sub { font-size:11px; color:#4a4040; line-height:1.6; }
+.dl-btn { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#c9a84c; border:0.5px solid rgba(201,168,76,0.3); padding:10px 20px; cursor:pointer; background:transparent; white-space:nowrap; transition:background 0.2s; }
+.dl-btn:hover { background:rgba(201,168,76,0.06); }
+.video-wrap { background:rgba(255,255,255,0.02); border:0.5px solid rgba(192,24,26,0.2); border-radius:2px; overflow:hidden; margin-top:4px; }
+.video-placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:40px 24px; text-align:center; }
+.play-icon { width:52px; height:52px; border-radius:50%; background:rgba(192,24,26,0.15); border:0.5px solid rgba(192,24,26,0.3); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 0.2s; }
+.play-icon:hover { background:rgba(192,24,26,0.25); }
+.play-tri { width:0; height:0; border-top:9px solid transparent; border-bottom:9px solid transparent; border-left:16px solid #c0181a; margin-left:3px; }
+.video-label { font-size:13px; color:#7a7070; }
+.video-sublabel { font-size:10px; color:#3a3030; letter-spacing:0.12em; text-transform:uppercase; }
+.rule-box { background:rgba(192,24,26,0.07); border:0.5px solid rgba(192,24,26,0.2); border-left:2px solid #c0181a; padding:18px 20px; margin-top:4px; }
+.rule-box p { font-size:13px; line-height:1.9; color:#c4baba; }
+.rule-box strong { color:#f0e8d8; font-weight:500; display:block; margin-bottom:8px; font-size:14px; }
+.steps { list-style:none; display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.si { display:flex; align-items:flex-start; gap:14px; }
+.sn { font-size:14px; color:rgba(192,24,26,0.45); min-width:20px; padding-top:2px; font-weight:500; }
+.st { font-size:13px; line-height:1.7; color:#7a7070; }
+.highlight { color:#c4baba; font-weight:500; }
+.exercise-box { background:rgba(201,168,76,0.04); border:0.5px solid rgba(201,168,76,0.2); padding:20px; margin-top:4px; }
+.exercise-steps { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.exercise-step { display:flex; align-items:flex-start; gap:12px; font-size:13px; line-height:1.7; color:#7a7070; }
+.en { color:rgba(201,168,76,0.5); min-width:18px; font-weight:500; }
+.win-box { background:rgba(192,24,26,0.07); border:0.5px solid rgba(192,24,26,0.2); border-left:2px solid #c0181a; padding:18px 20px; margin-top:4px; }
+.win-box p { font-size:15px; font-style:italic; line-height:1.8; color:#f0e8d8; }
+.unlock-box { background:rgba(255,255,255,0.01); border:0.5px solid rgba(255,255,255,0.05); padding:16px 18px; margin-top:4px; }
+.unlock-box p { font-size:13px; line-height:1.8; color:#5a5050; }
+.unlock-box span { color:#c9a84c; }
+.nextbtn { width:100%; background:linear-gradient(135deg,#c0181a,#7a0d0e); border:none; padding:15px 20px; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:#fdf8f2; cursor:pointer; margin-top:22px; transition:opacity 0.2s; }
+.nextbtn:hover { opacity:0.85; }
+.mod-footer { padding:14px 24px; border-top:0.5px solid rgba(192,24,26,0.12); display:flex; justify-content:space-between; }
+.fl { font-size:12px; font-style:italic; color:#c0181a; }
+.fr { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:#2a2020; }
+
+.complete-btn { width:100%; background:linear-gradient(135deg,#c0181a,#7a0d0e); border:none; padding:15px 20px; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:#fdf8f2; cursor:pointer; margin-top:22px; transition:opacity 0.2s; }
+.complete-btn:hover { opacity:0.85; }
+.complete-btn.done { background:linear-gradient(135deg,#2a6e2a,#1a4a1a); }
+
+</style>
+
+<div id="mod">
+
+<div class="mod-header">
+  <a class="back-btn" href="index.html">All Modules</a>
+  <div class="mod-id">Module 04</div>
+  <div class="mod-progress">4 of 5</div>
+</div>
+
+<div class="mod-hero">
+  <div class="mod-tag">The Campaign Video</div>
+  <div class="mod-title">Still images sell.<br>Video closes.</div>
+  <div class="mod-sub">Jewellery in motion. Light catching metal. Slow reveal. No videographer. No editing suite. One prompt.</div>
+  <div class="pills">
+    <div class="value-pill"><span class="vl">Replaces</span><span class="vn">£3,000 per video</span></div>
+    <div class="value-pill"><span class="vl">New Skill</span><span class="vn">r8-video</span></div>
+  </div>
+</div>
+
+<div class="sections">
+
+<div class="sb">
+  <div class="stag">Core Concept</div>
+  <div class="stxt">You already have the image. This module turns it into a campaign reel.<br><br>No videographer. No editing suite. No footage. You take the product shot you generated in Module 03 or the model shot you generated in Module 02. Upload it to Higgsfield and use the r8 skill to help you generate your motion prompt. Higgsfield animates it. The result looks like it was shot on set with a motion rig and a creative director telling the camera operator exactly what to do.<br><br>This is the video that runs at the top of your product page. Your Instagram reel. Your collection launch. One prompt. One result.</div>
+</div>
+
+<div class="sb">
+  <div class="stag">Your New Skill</div>
+  <div class="stxt" style="margin-bottom:12px;">Download the r8-video skill file below and upload it to your R8 Studio Skills project in Claude. You now have three skills active in your studio. The Clone skill for model shots. The Product skill for product shots. The Video skill for campaign reels. Each has its own trigger word. Each does one specific job.</div>
+  <div class="download-box">
+    <div class="dl-info">
+      <div class="dl-title">r8-video — Skill File</div>
+      <div class="dl-sub">Download and upload to your R8 Studio Skills project knowledge section. Watch the demo before you start.</div>
+    </div>
+    <button class="dl-btn">Download Skill</button>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">Watch First</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Module 04 Demo</div>
+      <div class="video-sublabel">Watch before you start</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">The Mistake</div>
+  <div class="stxt">Thinking the first take is the last one. And asking for multiple movements at once.<br><br>Most people write a video prompt like they're describing an action sequence. Dramatic sweeps. Fast cuts. Swirling light effects. The jewellery disappears inside all of it.<br><br>Jewellery video works on restraint. A slow drift. Light shifting across a stone. A single rotation that catches the edge of the ring. The movement draws the eye to the piece. It never competes with it. Less motion. More intention. That is what makes it look expensive.</div>
+</div>
+
+<div class="sb">
+  <div class="stag">The Golden Rule</div>
+  <div class="rule-box">
+    <strong>Motion must serve the jewellery. Not compete with it.</strong>
+    <p>The more you ask Higgsfield to do, the more likely the piece gets lost. One motion type. One intention. Done well, a 5-second drift across a gold ring looks like a £3,000 production. Done badly, it loses focus from the jewellery and confuses the audience about what you're selling.</p>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">The System</div>
+  <ul class="steps">
+    <li class="si"><span class="sn">1</span><span class="st">Take your best image from Module 02 or Module 03</span></li>
+    <li class="si"><span class="sn">2</span><span class="st">Open your R8 Studio Skills project in Claude</span></li>
+    <li class="si"><span class="sn">3</span><span class="st">Type <span class="highlight">video</span> and upload the image</span></li>
+    <li class="si"><span class="sn">4</span><span class="st">Claude outputs a complete Higgsfield motion prompt. Copy it</span></li>
+    <li class="si"><span class="sn">5</span><span class="st">Open Higgsfield and upload the same image as your base frame</span></li>
+    <li class="si"><span class="sn">6</span><span class="st">Paste the prompt. Set duration: <span class="highlight">5 seconds</span> for social, <span class="highlight">10 seconds</span> for hero video</span></li>
+    <li class="si"><span class="sn">7</span><span class="st">Generate. Review. Save your best result</span></li>
+  </ul>
+</div>
+
+<div class="sb">
+  <div class="stag">When the Output Does Not Look Right</div>
+  <div class="stxt">If the motion looks glitchy or unnatural, the base image is the problem. Or you are not generating multiple versions to see which one works best. The first generation is almost never the final choice.<br><br>Low resolution inputs produce unstable outputs. Use the highest quality version of your image. If the problem persists, go back to your r8-video skill in Claude and ask it to generate a different prompt.<br><br>AI is truly a trial and error part of production. It only costs you credits, not an entire salary you have to pay per hour. Be patient. The right result is in there.</div>
+</div>
+
+<div class="sb">
+  <div class="stag">The Exercise</div>
+  <div class="exercise-box">
+    <ul class="exercise-steps">
+      <li class="exercise-step"><span class="en">1</span>Take your best image from Module 03.</li>
+      <li class="exercise-step"><span class="en">2</span>Open your R8 Studio Skills project in Claude.</li>
+      <li class="exercise-step"><span class="en">3</span>Type <span class="highlight">video</span> and upload the image.</li>
+      <li class="exercise-step"><span class="en">4</span>Copy the full Higgsfield prompt Claude outputs.</li>
+      <li class="exercise-step"><span class="en">5</span>Open Higgsfield and upload the same image as your base frame.</li>
+      <li class="exercise-step"><span class="en">6</span>Paste the prompt. Generate at 5 seconds first.</li>
+      <li class="exercise-step"><span class="en">7</span>Save your best result. That is your first campaign reel.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">The Win</div>
+  <div class="win-box">
+    <p>You have a finished campaign reel. Your actual jewellery piece, in motion, with professional light and cinematic movement. Ready to post on Instagram, embed on your product page, or drop as your launch video. You made it from one image and one prompt. No set. No crew. No invoice.</p>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">What Comes Next</div>
+  <div class="unlock-box">
+    <p>That's your studio complete. <span>Four modules. Every content type covered.</span> Model shot, product shot, campaign video, all stitched up as one. The bonuses give you the stock to sell and the suppliers to source it from. You're ready to launch.</p>
+  </div>
+</div>
+
+<button class="complete-btn" id="completeBtn" onclick="markComplete()">Mark Complete and Continue</button>
+
+</div>
+
+<div class="mod-footer">
+  <div class="fl">Built with intention. Designed to scale.</div>
+  <div class="fr">R8Studio — 2026</div>
+</div>
+
+</div>
+
+</head>
+<body>
+
+<script>
+const MODULE_INDEX = 4;
+const NEXT_PAGE = 'module05.html';
+function markComplete() {
+  const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+  if (!completed.includes(MODULE_INDEX)) completed.push(MODULE_INDEX);
+  localStorage.setItem('r8_completed', JSON.stringify(completed));
+  const btn = document.getElementById('completeBtn');
+  if (btn) { btn.textContent = 'Completed ✓'; btn.classList.add('done'); }
+  setTimeout(() => { window.location.href = NEXT_PAGE; }, 800);
+}
+window.addEventListener('DOMContentLoaded', () => {
+  const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+  const btn = document.getElementById('completeBtn');
+  if (btn && completed.includes(MODULE_INDEX)) {
+    btn.textContent = 'Completed ✓';
+    btn.classList.add('done');
+  }
+});
+</script>
+
+</body>
+</html>

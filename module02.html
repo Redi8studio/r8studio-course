@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R8Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+#mod { background:#0a0808; font-family:'DM Sans',sans-serif; font-weight:300; color:#fdf8f2; }
+.mod-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:0.5px solid rgba(192,24,26,0.25); }
+.back-btn { font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:#5a5050; border:0.5px solid rgba(255,255,255,0.08); padding:6px 12px; cursor:pointer; }
+.mod-id { font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:#c0181a; }
+.mod-progress { font-size:11px; color:#4a4040; }
+.mod-hero { padding:32px 24px 24px; border-bottom:0.5px solid rgba(255,255,255,0.04); }
+.mod-tag { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#c0181a; margin-bottom:10px; }
+.mod-title { font-size:32px; font-weight:300; color:#f0e8d8; line-height:1.2; margin-bottom:10px; font-style:italic; }
+.mod-sub { font-size:13px; color:#5a5050; line-height:1.7; margin-bottom:18px; }
+.pills { display:flex; gap:10px; flex-wrap:wrap; }
+.value-pill { display:inline-flex; align-items:center; gap:8px; border:0.5px solid rgba(201,168,76,0.3); padding:6px 14px; }
+.vl { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#5a5050; }
+.vn { font-size:15px; color:#c9a84c; letter-spacing:0.03em; }
+.sections { padding:0 24px 32px; }
+.sb { border-bottom:0.5px solid rgba(255,255,255,0.04); padding:22px 0; }
+.sb:last-child { border-bottom:none; }
+.stag { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#c0181a; margin-bottom:10px; }
+.stxt { font-size:13px; line-height:1.9; color:#7a7070; }
+.video-wrap { background:rgba(255,255,255,0.02); border:0.5px solid rgba(192,24,26,0.2); border-radius:2px; overflow:hidden; margin-top:4px; }
+.video-placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:40px 24px; text-align:center; }
+.play-icon { width:52px; height:52px; border-radius:50%; background:rgba(192,24,26,0.15); border:0.5px solid rgba(192,24,26,0.3); display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background 0.2s; }
+.play-icon:hover { background:rgba(192,24,26,0.25); }
+.play-tri { width:0; height:0; border-top:9px solid transparent; border-bottom:9px solid transparent; border-left:16px solid #c0181a; margin-left:3px; }
+.video-label { font-size:13px; color:#7a7070; }
+.video-sublabel { font-size:10px; color:#3a3030; letter-spacing:0.12em; text-transform:uppercase; }
+.rule-box { background:rgba(192,24,26,0.07); border:0.5px solid rgba(192,24,26,0.2); border-left:2px solid #c0181a; padding:18px 20px; margin-top:4px; }
+.rule-box p { font-size:13px; line-height:1.9; color:#c4baba; }
+.rule-box strong { color:#f0e8d8; font-weight:500; display:block; margin-bottom:8px; font-size:14px; }
+.steps { list-style:none; display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.si { display:flex; align-items:flex-start; gap:14px; }
+.sn { font-size:14px; color:rgba(192,24,26,0.45); min-width:20px; padding-top:2px; font-weight:500; }
+.st { font-size:13px; line-height:1.7; color:#7a7070; }
+.highlight { color:#c4baba; font-weight:500; }
+.exercise-box { background:rgba(201,168,76,0.04); border:0.5px solid rgba(201,168,76,0.2); padding:20px; margin-top:4px; }
+.exercise-steps { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.exercise-step { display:flex; align-items:flex-start; gap:12px; font-size:13px; line-height:1.7; color:#7a7070; }
+.en { color:rgba(201,168,76,0.5); min-width:18px; font-weight:500; }
+.win-box { background:rgba(192,24,26,0.07); border:0.5px solid rgba(192,24,26,0.2); border-left:2px solid #c0181a; padding:18px 20px; margin-top:4px; }
+.win-box p { font-size:15px; font-style:italic; line-height:1.8; color:#f0e8d8; }
+.unlock-box { background:rgba(255,255,255,0.01); border:0.5px solid rgba(255,255,255,0.05); padding:16px 18px; margin-top:4px; }
+.unlock-box p { font-size:13px; line-height:1.8; color:#5a5050; }
+.unlock-box span { color:#c9a84c; }
+.nextbtn { width:100%; background:linear-gradient(135deg,#c0181a,#7a0d0e); border:none; padding:15px 20px; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:#fdf8f2; cursor:pointer; margin-top:22px; transition:opacity 0.2s; }
+.nextbtn:hover { opacity:0.85; }
+.mod-footer { padding:14px 24px; border-top:0.5px solid rgba(192,24,26,0.12); display:flex; justify-content:space-between; }
+.fl { font-size:12px; font-style:italic; color:#c0181a; }
+.fr { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:#2a2020; }
+
+.complete-btn { width:100%; background:linear-gradient(135deg,#c0181a,#7a0d0e); border:none; padding:15px 20px; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:#fdf8f2; cursor:pointer; margin-top:22px; transition:opacity 0.2s; }
+.complete-btn:hover { opacity:0.85; }
+.complete-btn.done { background:linear-gradient(135deg,#2a6e2a,#1a4a1a); }
+
+</style>
+
+<div id="mod">
+
+<div class="mod-header">
+  <a class="back-btn" href="index.html">All Modules</a>
+  <div class="mod-id">Module 02</div>
+  <div class="mod-progress">3 of 10</div>
+</div>
+
+<div class="mod-hero">
+  <div class="mod-tag">The Model Shot</div>
+  <div class="mod-title">Your studio is set up.<br>Now you use it for real.</div>
+  <div class="mod-sub">Take a real jewellery piece from a supplier site and generate a professional model shot. Any piece. Any look. Every time.</div>
+  <div class="pills">
+    <div class="value-pill"><span class="vl">Replaces</span><span class="vn">£800 per shoot</span></div>
+    <div class="value-pill"><span class="vl">Skill</span><span class="vn">r8-clone</span></div>
+  </div>
+</div>
+
+<div class="sections">
+
+<div class="sb">
+  <div class="stag">Core Concept</div>
+  <div class="stxt">This module teaches you how to take a real jewellery piece from a supplier site and generate a professional model shot using the Clone skill and Higgsfield.<br><br>By the end of this module you will know how to do this for any piece. A ring. A necklace. An earring. Any product. Any look. Every time.</div>
+</div>
+
+<div class="sb">
+  <div class="stag">The Matching Rule</div>
+  <div class="rule-box">
+    <strong>Your reference image must match the type of jewellery you want to shoot.</strong>
+    <p>If you want to generate a necklace shot find a reference of a model wearing a necklace. If you want a ring shot find a reference with a ring. If you want an earring shot find a reference with an earring.<br><br>The Clone skill recreates the position and placement from the reference. If the position already exists in the image the jewellery drops in cleanly. If it does not exist the result will not be accurate.<br><br>Match the reference to the piece every single time.</p>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">How to Find the Right Reference</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Finding Your Reference Image</div>
+      <div class="video-sublabel">Watch before you start</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">How to Replace Your Jewellery in Higgsfield</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Replacing the Jewellery</div>
+      <div class="video-sublabel">Follow along in the demo</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">Three Examples — Ring, Necklace, Earring</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Ring, Necklace and Earring Walkthrough</div>
+      <div class="video-sublabel">Three examples back to back</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">When the Size is Wrong</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Fixing Jewellery Size</div>
+      <div class="video-sublabel">What to do when it looks oversized</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">When the Image is Not Coming Out Right</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Troubleshooting Your Output</div>
+      <div class="video-sublabel">Watch and then try again</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">When the Placement is Off</div>
+  <div class="video-wrap">
+    <div class="video-placeholder">
+      <div class="play-icon"><div class="play-tri"></div></div>
+      <div class="video-label">Fixing Placement</div>
+      <div class="video-sublabel">How to correct positioning</div>
+    </div>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">The System</div>
+  <ul class="steps">
+    <li class="si"><span class="sn">1</span><span class="st">Go to any jewellery supplier site. If you are a founding member use the supplier list in Bonus 01</span></li>
+    <li class="si"><span class="sn">2</span><span class="st">Pick one piece. A ring, a necklace, or an earring</span></li>
+    <li class="si"><span class="sn">3</span><span class="st">Find a reference image that matches that piece type</span></li>
+    <li class="si"><span class="sn">4</span><span class="st">Open your R8 Studio Skills project in Claude</span></li>
+    <li class="si"><span class="sn">5</span><span class="st">Type <span class="highlight">clone</span> then upload your reference image</span></li>
+    <li class="si"><span class="sn">6</span><span class="st">Take the output prompt into Higgsfield</span></li>
+    <li class="si"><span class="sn">7</span><span class="st">Replace the jewellery</span></li>
+    <li class="si"><span class="sn">8</span><span class="st">Generate and save your best result</span></li>
+  </ul>
+</div>
+
+<div class="sb">
+  <div class="stag">The Exercise</div>
+  <div class="exercise-box">
+    <ul class="exercise-steps">
+      <li class="exercise-step"><span class="en">1</span>Go to any jewellery supplier site. If you are a founding member use the supplier list in Bonus 01.</li>
+      <li class="exercise-step"><span class="en">2</span>Pick one piece. A ring, a necklace, or an earring.</li>
+      <li class="exercise-step"><span class="en">3</span>Find a reference image that matches that piece type.</li>
+      <li class="exercise-step"><span class="en">4</span>Open your R8 Studio Skills project in Claude.</li>
+      <li class="exercise-step"><span class="en">5</span>Type <span class="highlight">clone</span> then upload your reference image.</li>
+      <li class="exercise-step"><span class="en">6</span>Take the output into Higgsfield.</li>
+      <li class="exercise-step"><span class="en">7</span>Replace the jewellery and generate.</li>
+      <li class="exercise-step"><span class="en">8</span>Save your best result.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">The Win</div>
+  <div class="win-box">
+    <p>You have generated a professional model shot of a real jewellery piece. You know how to match your reference to your piece type. You know how to replace your product accurately. You know what to do when things go wrong. This process works for every piece you will ever shoot.</p>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">What Comes Next</div>
+  <div class="unlock-box">
+    <p><span>Module 03</span> moves from model shots to product shots. Clean white background. Flat lay. Close up. Three versions of any piece in one session.</p>
+  </div>
+</div>
+
+<button class="complete-btn" id="completeBtn" onclick="markComplete()">Mark Complete and Continue</button>
+
+</div>
+
+<div class="mod-footer">
+  <div class="fl">Built with intention. Designed to scale.</div>
+  <div class="fr">R8Studio — 2026</div>
+</div>
+
+</div>
+
+</head>
+<body>
+
+<script>
+const MODULE_INDEX = 2;
+const NEXT_PAGE = 'module03.html';
+function markComplete() {
+  const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+  if (!completed.includes(MODULE_INDEX)) completed.push(MODULE_INDEX);
+  localStorage.setItem('r8_completed', JSON.stringify(completed));
+  const btn = document.getElementById('completeBtn');
+  if (btn) { btn.textContent = 'Completed ✓'; btn.classList.add('done'); }
+  setTimeout(() => { window.location.href = NEXT_PAGE; }, 800);
+}
+window.addEventListener('DOMContentLoaded', () => {
+  const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+  const btn = document.getElementById('completeBtn');
+  if (btn && completed.includes(MODULE_INDEX)) {
+    btn.textContent = 'Completed ✓';
+    btn.classList.add('done');
+  }
+});
+</script>
+
+</body>
+</html>

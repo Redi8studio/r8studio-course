@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R8Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+#mod { background:#0a0808; font-family:'DM Sans',sans-serif; font-weight:300; color:#fdf8f2; }
+.mod-header { display:flex; align-items:center; justify-content:space-between; padding:16px 24px; border-bottom:0.5px solid rgba(192,24,26,0.25); }
+.back-btn { font-size:11px; letter-spacing:0.15em; text-transform:uppercase; color:#5a5050; border:0.5px solid rgba(255,255,255,0.08); padding:6px 12px; cursor:pointer; }
+.mod-id { font-size:13px; letter-spacing:0.2em; text-transform:uppercase; color:#c0181a; }
+.mod-tag-right { font-size:11px; color:#4a4040; }
+.mod-hero { padding:32px 24px 24px; border-bottom:0.5px solid rgba(255,255,255,0.04); }
+.mod-tag { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#c9a84c; margin-bottom:10px; }
+.mod-title { font-size:32px; font-weight:300; color:#f0e8d8; line-height:1.2; margin-bottom:10px; font-style:italic; }
+.mod-sub { font-size:13px; color:#5a5050; line-height:1.7; margin-bottom:18px; }
+.bonus-pill { display:inline-flex; align-items:center; gap:8px; border:0.5px solid rgba(201,168,76,0.3); padding:6px 14px; }
+.bp-label { font-size:10px; letter-spacing:0.15em; text-transform:uppercase; color:#5a5050; }
+.bp-val { font-size:13px; color:#c9a84c; letter-spacing:0.03em; }
+.sections { padding:0 24px 32px; }
+.sb { border-bottom:0.5px solid rgba(255,255,255,0.04); padding:22px 0; }
+.sb:last-child { border-bottom:none; }
+.stag { font-size:9px; letter-spacing:0.3em; text-transform:uppercase; color:#c9a84c; margin-bottom:10px; }
+.stxt { font-size:13px; line-height:1.9; color:#7a7070; }
+.highlight-gold { color:#c9a84c; font-weight:500; }
+
+.updates-grid { display:flex; flex-direction:column; gap:10px; margin-top:4px; }
+.update-row { display:flex; align-items:flex-start; gap:14px; padding:14px 16px; background:rgba(255,255,255,0.015); border:0.5px solid rgba(255,255,255,0.05); border-left:1.5px solid rgba(201,168,76,0.4); }
+.update-icon { font-size:16px; min-width:22px; padding-top:1px; }
+.update-text { font-size:13px; line-height:1.7; color:#7a7070; }
+.update-text span { color:#c4baba; font-weight:500; }
+
+.win-box { background:rgba(192,24,26,0.07); border:0.5px solid rgba(192,24,26,0.2); border-left:2px solid #c0181a; padding:18px 20px; margin-top:4px; }
+.win-box p { font-size:15px; font-style:italic; line-height:1.8; color:#f0e8d8; }
+
+.how-box { background:rgba(201,168,76,0.04); border:0.5px solid rgba(201,168,76,0.2); padding:20px 22px; margin-top:4px; }
+.how-box p { font-size:13px; line-height:1.9; color:#c4baba; }
+
+.closing-box { background:rgba(255,255,255,0.01); border:0.5px solid rgba(255,255,255,0.05); padding:16px 18px; margin-top:4px; }
+.closing-box p { font-size:13px; line-height:1.9; color:#5a5050; }
+.closing-box span { color:#c9a84c; }
+
+.donebtn { width:100%; background:linear-gradient(135deg,#c9a84c,#8a6a28); border:none; padding:15px 20px; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:#0a0808; cursor:pointer; margin-top:22px; transition:opacity 0.2s; font-weight:500; }
+.donebtn:hover { opacity:0.85; }
+.mod-footer { padding:14px 24px; border-top:0.5px solid rgba(192,24,26,0.12); display:flex; justify-content:space-between; }
+.fl { font-size:12px; font-style:italic; color:#c0181a; }
+.fr { font-size:9px; letter-spacing:0.2em; text-transform:uppercase; color:#2a2020; }
+
+.complete-btn { width:100%; background:linear-gradient(135deg,#c0181a,#7a0d0e); border:none; padding:15px 20px; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:#fdf8f2; cursor:pointer; margin-top:22px; transition:opacity 0.2s; }
+.complete-btn:hover { opacity:0.85; }
+.complete-btn.done { background:linear-gradient(135deg,#2a6e2a,#1a4a1a); }
+
+</style>
+
+<div id="mod">
+
+<div class="mod-header">
+  <a class="back-btn" href="index.html">All Modules</a>
+  <div class="mod-id">Bonus 03</div>
+  <div class="mod-tag-right">Lifetime Updates</div>
+</div>
+
+<div class="mod-hero">
+  <div class="mod-tag">Bonus 03</div>
+  <div class="mod-title">The system keeps<br>growing with you.</div>
+  <div class="mod-sub">Every relevant tool, resource, supplier, or skill we find and test gets added for you. Automatically.</div>
+  <div class="bonus-pill"><span class="bp-label">Access</span><span class="bp-val">Founding Member. Forever.</span></div>
+</div>
+
+<div class="sections">
+
+<div class="sb">
+  <div class="stag">What This Is</div>
+  <div class="stxt">AI tools move fast. Apps evolve. New platforms launch. The ones you use today will update, improve, and sometimes get replaced by something better.<br><br>This bonus means you never have to figure that out alone.</div>
+</div>
+
+<div class="sb">
+  <div class="stag">What It Covers</div>
+  <div class="stxt" style="margin-bottom:14px;">This is not limited to skills. Anything that makes running a jewellery brand faster, smarter, and more cost effective gets added to the system.</div>
+  <div class="updates-grid">
+    <div class="update-row">
+      <div class="update-icon">✦</div>
+      <div class="update-text"><span>New skills</span> built for real jewellery use cases as the system grows</div>
+    </div>
+    <div class="update-row">
+      <div class="update-icon">✦</div>
+      <div class="update-text"><span>Updated prompts</span> that perform better as platforms evolve</div>
+    </div>
+    <div class="update-row">
+      <div class="update-icon">✦</div>
+      <div class="update-text"><span>Workflows and resources</span> that replace things you were paying for</div>
+    </div>
+  </div>
+  <div class="stxt" style="margin-top:14px;">Apps evolve constantly. We stay on top of it so you do not have to. When something new is relevant to your brand we bring it to you. Tested, explained, and ready to use.</div>
+</div>
+
+<div class="sb">
+  <div class="stag">How It Works</div>
+  <div class="how-box">
+    <p>When something new is added it will appear directly in your R8 Studio member area. No repurchase. No upgrade fee. No new version to buy. You get it automatically as part of your founding member access.</p>
+  </div>
+</div>
+
+<div class="sb">
+  <div class="stag">What This Means for You</div>
+  <div class="win-box">
+    <p>You invested once. The system keeps growing. Every relevant tool, resource, supplier, or skill we find and test gets added for you. Your studio today is not the ceiling. It is the starting point.</p>
+  </div>
+</div>
+
+<button class="complete-btn" id="completeBtn" onclick="markComplete()">Mark Complete and Continue</button>
+
+</div>
+
+<div class="mod-footer">
+  <div class="fl">Built with intention. Designed to scale.</div>
+  <div class="fr">R8Studio — 2026</div>
+</div>
+
+</div>
+
+</head>
+<body>
+
+<script>
+const MODULE_INDEX = 8;
+const NEXT_PAGE = 'bonus04.html';
+function markComplete() {
+  const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+  if (!completed.includes(MODULE_INDEX)) completed.push(MODULE_INDEX);
+  localStorage.setItem('r8_completed', JSON.stringify(completed));
+  const btn = document.getElementById('completeBtn');
+  if (btn) { btn.textContent = 'Completed ✓'; btn.classList.add('done'); }
+  setTimeout(() => { window.location.href = NEXT_PAGE; }, 800);
+}
+window.addEventListener('DOMContentLoaded', () => {
+  const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+  const btn = document.getElementById('completeBtn');
+  if (btn && completed.includes(MODULE_INDEX)) {
+    btn.textContent = 'Completed ✓';
+    btn.classList.add('done');
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>R8 Studio — AI Jewellery Content System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0808;
+    --deep: #110d0d;
+    --red: #c0181a;
+    --red-bright: #e01f21;
+    --red-dark: #7a0d0e;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --cream: #f0e8d8;
+    --white: #fdf8f2;
+    --gray: #8a8080;
+    --gray-light: #c4baba;
+    --gray-dark: #3a3030;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(192,24,26,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 10% 90%, rgba(192,24,26,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse 30% 20% at 50% 50%, rgba(201,168,76,0.02) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* WELCOME SCREEN */
+  .welcome-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .welcome-screen.hidden {
+    opacity: 0;
+    transform: translateY(-20px);
+    pointer-events: none;
+  }
+
+  .welcome-logo {
+    width: 220px;
+    height: auto;
+    margin-bottom: 32px;
+    animation: fadeUp 0.8s ease forwards;
+    display: block;
+  }
+
+  .welcome-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  .header-logo-img {
+    height: 36px;
+    width: auto;
+    display: block;
+  }
+
+  .welcome-prompt {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-style: italic;
+    color: var(--cream);
+    margin-bottom: 24px;
+    text-align: center;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .name-input {
+    width: 100%;
+    max-width: 320px;
+    background: rgba(255,255,255,0.03);
+    border: 0.5px solid rgba(192,24,26,0.4);
+    border-bottom: 1.5px solid var(--red);
+    padding: 14px 18px;
+    font-size: 15px;
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    outline: none;
+    text-align: center;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s, background 0.2s;
+    animation: fadeUp 0.8s ease 0.3s both;
+    margin-bottom: 16px;
+  }
+
+  .name-input::placeholder { color: var(--gray-dark); }
+  .name-input:focus { border-color: var(--red-bright); background: rgba(255,255,255,0.05); }
+
+  .enter-btn {
+    width: 100%;
+    max-width: 320px;
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    border: none;
+    padding: 14px 20px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--white);
+    cursor: pointer;
+    transition: opacity 0.2s;
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .enter-btn:hover { opacity: 0.85; }
+
+  /* MAIN SITE */
+  .main-site {
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+  }
+
+  .main-site.visible { opacity: 1; }
+
+  /* HEADER */
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 0.5px solid rgba(192,24,26,0.2);
+    position: sticky;
+    top: 0;
+    background: rgba(10,8,8,0.95);
+    backdrop-filter: blur(10px);
+    z-index: 50;
+  }
+
+  .header-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--red-bright);
+    letter-spacing: 0.04em;
+  }
+
+  .header-greeting {
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+  }
+
+  .header-greeting span { color: var(--gold); }
+
+  .streak-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201,168,76,0.08);
+    border: 0.5px solid rgba(201,168,76,0.25);
+    padding: 5px 12px;
+  }
+
+  .streak-fire { font-size: 14px; }
+  .streak-count { font-size: 11px; color: var(--gold); letter-spacing: 0.1em; font-weight: 500; }
+  .streak-label { font-size: 9px; color: var(--gray); letter-spacing: 0.15em; text-transform: uppercase; }
+
+  /* WELCOME MESSAGE */
+  .welcome-section {
+    padding: 48px 24px 40px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  }
+
+  .welcome-tag {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+
+  .welcome-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-bottom: 32px;
+  }
+
+  .founder-note {
+    background: rgba(255,255,255,0.015);
+    border: 0.5px solid rgba(255,255,255,0.05);
+    border-left: 2px solid var(--red);
+    padding: 24px 26px;
+    margin-bottom: 0;
+  }
+
+  .founder-note p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    font-weight: 300;
+    font-style: italic;
+    line-height: 2;
+    color: var(--gray-light);
+    margin-bottom: 18px;
+  }
+
+  .founder-note p:last-child { margin-bottom: 0; }
+
+  .founder-sign {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--cream);
+    margin-top: 24px;
+  }
+
+  /* PROGRESS OVERVIEW */
+  .progress-section {
+    padding: 32px 24px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.04);
+  }
+
+  .section-tag {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-tag::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: rgba(192,24,26,0.2);
+  }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.03);
+    border: 0.5px solid rgba(255,255,255,0.06);
+    height: 3px;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+    transition: width 0.6s ease;
+  }
+
+  .progress-text {
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 0.1em;
+    margin-bottom: 24px;
+  }
+
+  .progress-text span { color: var(--gold); }
+
+  /* MODULE LIST */
+  .module-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .module-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: rgba(255,255,255,0.015);
+    border: 0.5px solid rgba(255,255,255,0.04);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .module-item:hover { background: rgba(255,255,255,0.03); border-color: rgba(192,24,26,0.2); }
+
+  .module-item.completed { border-left: 2px solid var(--red); }
+  .module-item.bonus { border-left: 2px solid rgba(201,168,76,0.4); }
+  .module-item.coming-soon { opacity: 0.4; cursor: default; }
+
+  .module-check {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 0.5px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 10px;
+    transition: all 0.2s;
+  }
+
+  .module-item.completed .module-check {
+    background: var(--red);
+    border-color: var(--red);
+    color: white;
+  }
+
+  .module-item.bonus .module-check {
+    border-color: rgba(201,168,76,0.4);
+  }
+
+  .module-info { flex: 1; }
+
+  .module-num {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-dark);
+    margin-bottom: 2px;
+  }
+
+  .module-item.bonus .module-num { color: rgba(201,168,76,0.5); }
+
+  .module-name {
+    font-size: 13px;
+    color: var(--gray-light);
+    font-weight: 300;
+  }
+
+  .module-item.completed .module-name { color: var(--cream); }
+
+  .module-arrow {
+    font-size: 11px;
+    color: var(--gray-dark);
+  }
+
+  .coming-soon-tag {
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--red-dark);
+    border: 0.5px solid rgba(192,24,26,0.2);
+    padding: 3px 8px;
+  }
+
+  /* SECTION DIVIDER */
+  .list-divider {
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    padding: 16px 0 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .list-divider::after {
+    content: '';
+    flex: 1;
+    height: 0.5px;
+    background: rgba(201,168,76,0.15);
+  }
+
+  /* FOOTER */
+  .site-footer {
+    padding: 20px 24px;
+    border-top: 0.5px solid rgba(192,24,26,0.12);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+  }
+
+  .footer-left {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .footer-right {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gray-dark);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<!-- WELCOME SCREEN -->
+<div class="welcome-screen" id="welcomeScreen">
+  <img src="r8studio-logo.jpg" alt="R8Studio" class="welcome-logo" />
+  <div class="welcome-sub">AI Jewellery Content System</div>
+  <div class="welcome-prompt">What shall we call you?</div>
+  <input class="name-input" type="text" id="nameInput" placeholder="Enter your first name..." maxlength="30" />
+  <button class="enter-btn" onclick="enterStudio()">Enter Your Studio</button>
+</div>
+
+<!-- MAIN SITE -->
+<div class="main-site" id="mainSite">
+
+  <!-- HEADER -->
+  <div class="site-header">
+    <img src="r8studio-logo.jpg" alt="R8Studio" class="header-logo-img" />
+    <div class="header-greeting">Welcome back, <span id="headerName"></span></div>
+    <div class="streak-badge">
+      <span class="streak-fire">🔥</span>
+      <div>
+        <div class="streak-count" id="streakCount">0</div>
+        <div class="streak-label">Day Streak</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WELCOME MESSAGE -->
+  <div class="welcome-section">
+    <div class="welcome-tag">Welcome to Your Studio</div>
+    <div class="welcome-name" id="welcomeName">Good to have you here.</div>
+    <div class="founder-note">
+      <p>I did not build this for you first. I built it for me.</p>
+      <p>I owned a jewellery business. I know what it costs. The photographer. The model. The studio. The editor. The inventory you buy before you know if it sells. The hours you never get back. The energy you spend on everything except actually growing the business.</p>
+      <p>I was bleeding money on shoots before a single sale was made. Buying stock I was not sure would move. Doing everything myself because hiring felt like a gamble I could not afford.</p>
+      <p>Then I started using AI consistently. Not experimenting. Consistently. And one afternoon started producing what used to take a full week on set. Same quality. A fraction of the cost. A fraction of the time.</p>
+      <p>The biggest shift was this. I could now show the product before I owned it. Generate the content, test the market, see what sells. Then order the stock.</p>
+      <p>That is what this system does. It was built by someone who was trying to solve their own problem. Now it solves yours.</p>
+      <div class="founder-sign">R8 💋</div>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-section">
+    <div class="section-tag">Your Progress</div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+    </div>
+    <div class="progress-text"><span id="progressCount">0</span> of 10 completed</div>
+
+    <div class="module-list">
+
+      <div class="list-divider">The Core</div>
+
+      <a class="module-item" id="item-0" href="module00.html">
+        <div class="module-check" id="check-0"></div>
+        <div class="module-info">
+          <div class="module-num">Module 00</div>
+          <div class="module-name">Your First Win</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <a class="module-item" id="item-1" href="module01.html">
+        <div class="module-check" id="check-1"></div>
+        <div class="module-info">
+          <div class="module-num">Module 01</div>
+          <div class="module-name">Your Studio Setup</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <a class="module-item" id="item-2" href="module02.html">
+        <div class="module-check" id="check-2"></div>
+        <div class="module-info">
+          <div class="module-num">Module 02</div>
+          <div class="module-name">The Model Shot</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <a class="module-item" id="item-3" href="module03.html">
+        <div class="module-check" id="check-3"></div>
+        <div class="module-info">
+          <div class="module-num">Module 03</div>
+          <div class="module-name">The Product Shot</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <a class="module-item" id="item-4" href="module04.html">
+        <div class="module-check" id="check-4"></div>
+        <div class="module-info">
+          <div class="module-num">Module 04</div>
+          <div class="module-name">The Campaign Video</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <a class="module-item" id="item-5" href="module05.html">
+        <div class="module-check" id="check-5"></div>
+        <div class="module-info">
+          <div class="module-num">Module 05</div>
+          <div class="module-name">The Full Set</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <div class="list-divider">The Bonuses</div>
+
+      <a class="module-item bonus" id="item-6" href="bonus01.html">
+        <div class="module-check" id="check-6"></div>
+        <div class="module-info">
+          <div class="module-num">Bonus 01</div>
+          <div class="module-name">The Supplier Vault</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <a class="module-item bonus" id="item-7" href="bonus02.html">
+        <div class="module-check" id="check-7"></div>
+        <div class="module-info">
+          <div class="module-num">Bonus 02</div>
+          <div class="module-name">The Logistics Partner</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <a class="module-item bonus" id="item-8" href="bonus03.html">
+        <div class="module-check" id="check-8"></div>
+        <div class="module-info">
+          <div class="module-num">Bonus 03</div>
+          <div class="module-name">Lifetime Updates</div>
+        </div>
+        <div class="module-arrow">→</div>
+      </a>
+
+      <a class="module-item bonus coming-soon" id="item-9">
+        <div class="module-check" id="check-9"></div>
+        <div class="module-info">
+          <div class="module-num">Bonus 04</div>
+          <div class="module-name">The Freepik Multiplier</div>
+        </div>
+        <div class="coming-soon-tag">Coming Soon</div>
+      </a>
+
+    </div>
+  </div>
+
+  <div class="site-footer">
+    <div class="footer-left">Built with intention. Designed to scale.</div>
+    <div class="footer-right">R8Studio — 2026</div>
+  </div>
+
+</div>
+
+<script>
+  const TOTAL = 10;
+
+  function enterStudio() {
+    const name = document.getElementById('nameInput').value.trim();
+    if (!name) {
+      document.getElementById('nameInput').focus();
+      document.getElementById('nameInput').style.borderColor = '#e01f21';
+      return;
+    }
+    localStorage.setItem('r8_name', name);
+    localStorage.setItem('r8_visited', 'true');
+    loadStudio(name);
+    document.getElementById('welcomeScreen').classList.add('hidden');
+    setTimeout(() => {
+      document.getElementById('welcomeScreen').style.display = 'none';
+      document.getElementById('mainSite').classList.add('visible');
+    }, 800);
+    updateStreak();
+  }
+
+  function loadStudio(name) {
+    document.getElementById('headerName').textContent = name;
+    document.getElementById('welcomeName').textContent = 'Good to have you here, ' + name + '.';
+    loadProgress();
+    loadStreak();
+  }
+
+  function loadProgress() {
+    const completed = JSON.parse(localStorage.getItem('r8_completed') || '[]');
+    let count = 0;
+    for (let i = 0; i < TOTAL; i++) {
+      if (completed.includes(i)) {
+        count++;
+        document.getElementById('item-' + i).classList.add('completed');
+        document.getElementById('check-' + i).innerHTML = '✓';
+      }
+    }
+    document.getElementById('progressCount').textContent = count;
+    document.getElementById('progressBar').style.width = (count / TOTAL * 100) + '%';
+  }
+
+  function loadStreak() {
+    const streak = parseInt(localStorage.getItem('r8_streak') || '0');
+    document.getElementById('streakCount').textContent = streak;
+  }
+
+  function updateStreak() {
+    const today = new Date().toDateString();
+    const lastVisit = localStorage.getItem('r8_last_visit');
+    let streak = parseInt(localStorage.getItem('r8_streak') || '0');
+    if (lastVisit === today) return;
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (lastVisit === yesterday.toDateString()) {
+      streak++;
+    } else if (lastVisit !== today) {
+      streak = 1;
+    }
+    localStorage.setItem('r8_streak', streak);
+    localStorage.setItem('r8_last_visit', today);
+  }
+
+  // On load — check if name already saved
+  window.addEventListener('DOMContentLoaded', () => {
+    const saved = localStorage.getItem('r8_name');
+    const visited = localStorage.getItem('r8_visited');
+    if (saved && visited) {
+      document.getElementById('welcomeScreen').style.display = 'none';
+      document.getElementById('mainSite').classList.add('visible');
+      loadStudio(saved);
+      updateStreak();
+    }
+    document.getElementById('nameInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') enterStudio();
+    });
+  });
+</script>
+
+</body>
+</html>
